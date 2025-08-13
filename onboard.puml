@@ -1,0 +1,87 @@
+@startuml
+skinparam folderBackgroundColor<<deploy>> LightSteelBlue
+skinparam folderBackgroundColor<<app>> LightGreen
+skinparam folderBackgroundColor<<github>> LightSalmon
+skinparam folderBackgroundColor<<root>> White
+
+folder "myapp" <<root>> {
+  folder "app" <<app>> {
+    file "main.go"
+    folder "handlers"
+    folder "models"
+    file "go.mod"
+    file "go.sum"
+  }
+
+  folder "deploy" <<deploy>> {
+    folder "ansible" {
+      file "README.md"
+      file "ansible.cfg"
+      folder "inventory" {
+        file "dev.yml"
+        file "prod.yml"
+      }
+      folder "playbooks" {
+        file "site.yml"
+        file "provision.yml"
+        file "deploy.yml"
+        file "cleanup.yml"
+      }
+      folder "roles" {
+        folder "common" {
+          file "README.md"
+          file "meta/main.yml"
+          file "tasks/main.yml"
+          file "handlers/main.yml"
+          file "defaults/main.yml"
+          folder "molecule" {
+            folder "default" {
+              file "molecule.yml"
+              file "converge.yml"
+              file "verify.yml"
+            }
+          }
+        }
+        folder "docker"
+        folder "k8s-node"
+        folder "k8s-cluster"
+        folder "cert-manager"
+        folder "ingress-nginx"
+        folder "prometheus-stack"
+        folder "efk"
+        folder "postgres-ha"
+        folder "redis"
+        folder "myapp"
+      }
+      folder "group_vars" {
+        file "all.yml"
+        file "k8s_cluster.yml"
+        file "myapp.yml"
+      }
+      folder "host_vars"
+      file "requirements.yml"
+    }
+
+    folder "terraform"
+    folder "helm"
+    folder "docker"
+    folder "k8s"
+    file "skaffold.yaml"
+    file "docker-compose.yml"
+  }
+
+  folder ".github" <<github>> {
+    folder "workflows" {
+      file "ci.yml"
+      file "cd.yml"
+    }
+    file "renovate.json"
+  }
+
+  file ".pre-commit-config.yaml"
+  file "Taskfile.yml"
+  file "requirements.txt"
+  file "LICENSE"
+  file "README.md"
+}
+@enduml
