@@ -1,1 +1,12 @@
-18,25
+version: "3.9"
+services:
+  app:
+    image: "${DOCKERHUB_USER:-local}/full-devops-stack:latest"
+    build:
+      context: ../
+      dockerfile: deploy/docker/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped

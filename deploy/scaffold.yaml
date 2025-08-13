@@ -1,0 +1,24 @@
+#перезагрузка для кубера (образ, пуш, деплой в кластер, порт-форвард)
+apiVersion: skaffold/v4beta7
+kind: Config
+metadata:
+  name: full-devops-stack
+
+build:
+  artifacts:
+    - image: full-devops-stack
+      docker:
+        dockerfile: deploy/docker/Dockerfile
+  local:
+    push: false
+
+deploy:
+  kubectl:
+    manifests:
+      - deploy/k8s/*.yaml
+
+portForward:
+  - resourceType: service
+    resourceName: full-devops-stack
+    port: 8080
+    localPort: 8080
