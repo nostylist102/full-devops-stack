@@ -1,0 +1,16 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "labels": ["dependencies"],
+  "packageRules": [
+    {
+      "matchManagers": ["gomod"],
+      "groupName": "Go modules"
+    },
+    {
+      "matchManagers": ["dockerfile", "github-actions"],
+      "groupName": "CI/CD & Docker"
+    }
+  ],
+  "schedule": ["after 10pm every weekday", "before 5am every weekday", "every weekend"]
+}

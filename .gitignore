@@ -1,0 +1,22 @@
+# --- Go / IDE ---
+.env
+.idea/
+.vscode/
+*.exe
+*.log
+
+# --- Terraform ---
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# --- Ansible ---
+*.retry
+**/molecule/*/.cache/
+**/molecule/*/.molecule/
+
+# --- Docker / K8s ---
+*.tar
+*.tgz
+.secrets/
