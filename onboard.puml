@@ -28,7 +28,7 @@ folder "myapp" <<root>> {
 
   ' ---------- CI/CD ----------
   folder ".github" <<github>> {
-    file "cicd.yml"   as cicd
+    file "ci.yml"   as ci
   }
 
   ' ---------- Deploy ----------
@@ -96,7 +96,7 @@ folder "myapp" <<root>> {
 }
 
 ' ---------- потоки и зависимости ----------
-cicd --> site  : triggers
+ci --> site  : triggers
 site --> provision : include
 provision --> k8sCluster : apply
 pg --> prom : expose metrics
