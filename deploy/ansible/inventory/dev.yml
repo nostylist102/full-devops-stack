@@ -4,5 +4,6 @@ all:
     k8s_cluster:
       hosts:
         dev-k8s-01:
-          ansible_host: 192.168.56.101
-          ansible_user: vagrant
+          ansible_host: 127.0.0.1
+          ansible_user: $USER
+          ansible_connection: local
