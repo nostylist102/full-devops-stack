@@ -1,0 +1,3 @@
+---
+myapp_image: "yourdockeruser/full-devops-stack"
+myapp_tag: "{{ image_tag | default('latest') }}"

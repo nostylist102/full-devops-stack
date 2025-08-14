@@ -1,0 +1,6 @@
+# minimal values for full-devops-stack chart
+image:
+  repository: full-devops-stack
+  tag: latest
+service:
+  port: 8080

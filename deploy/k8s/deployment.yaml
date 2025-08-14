@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: full-devops-stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: full-devops-stack
+  template:
+    metadata:
+      labels:
+        app: full-devops-stack
+    spec:
+      containers:
+        - name: app
+          image: full-devops-stack:latest
+          ports:
+            - containerPort: 8080

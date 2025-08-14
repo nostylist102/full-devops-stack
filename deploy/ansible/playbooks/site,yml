@@ -1,0 +1,9 @@
+---
+- name: Full site playbook
+  hosts: k8s_cluster
+  become: true
+  gather_facts: true
+
+  tasks:
+    - import_tasks: provision.yml
+    - import_tasks: deploy.yml

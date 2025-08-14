@@ -1,0 +1,6 @@
+---
+- name: Deploy full-devops-stack
+  hosts: k8s_cluster
+  become: true
+  roles:
+    - myapp-role

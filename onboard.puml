@@ -77,12 +77,18 @@ folder "myapp" <<root>> {
 
     
     
-    folder "terraform"  <<iac>>
-    folder "helm"
+    folder "terraform"  <<iac>> {
+      file "main.tf"
+    }
+    folder "helm" {
+      file "values.yaml"
+    }
     folder "docker" {
       file "Dockerfile"
     }
-    folder "k8s"
+    folder "k8s" {
+      file "deployment.yaml"
+    }
     file "skaffold.yaml"
     file "docker-compose.yml"
   }

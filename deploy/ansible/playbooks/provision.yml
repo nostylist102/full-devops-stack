@@ -1,0 +1,9 @@
+---
+- name: Provision k8s cluster
+  hosts: k8s_cluster
+  become: true
+  roles:
+    - common
+    - docker
+    - k8s-node
+    - k8s-cluster

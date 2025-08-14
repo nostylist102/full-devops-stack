@@ -1,0 +1,11 @@
+---
+all:
+  children:
+    k8s_cluster:
+      hosts:
+        prod-k8s-01:
+          ansible_host: 10.0.1.11
+          ansible_user: ubuntu
+        prod-k8s-02:
+          ansible_host: 10.0.1.12
+          ansible_user: ubuntu
