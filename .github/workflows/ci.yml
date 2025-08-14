@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./app
           file: deploy/docker/Dockerfile
           push: true
           tags: ${{ vars.DOCKERHUB_USER }}/full-devops-stack:latest
