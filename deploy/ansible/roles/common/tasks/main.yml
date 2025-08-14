@@ -1,0 +1,8 @@
+---
+- name: Ensure common packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - curl
+    - git

@@ -1,0 +1,7 @@
+---
+- name: Install postgres-operator Helm chart
+  kubernetes.core.helm:
+    name: postgres-operator
+    chart_ref: postgres-operator/postgres-operator
+    release_namespace: postgres
+    create_namespace: true

@@ -1,0 +1,7 @@
+---
+- name: Install cert-manager Helm chart
+  kubernetes.core.helm:
+    name: cert-manager
+    chart_ref: cert-manager/cert-manager
+    release_namespace: cert-manager
+    create_namespace: true

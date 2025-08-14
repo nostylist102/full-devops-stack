@@ -1,0 +1,4 @@
+---
+- name: Initialize Kubernetes cluster
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16
+  when: inventory_hostname == groups['k8s_cluster'][0]

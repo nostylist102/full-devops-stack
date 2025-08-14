@@ -1,0 +1,7 @@
+---
+- name: Install EFK stack via Helm
+  kubernetes.core.helm:
+    name: efk
+    chart_ref: elastic/elastic-stack
+    release_namespace: logging
+    create_namespace: true

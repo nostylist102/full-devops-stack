@@ -53,16 +53,68 @@ folder "myapp" <<root>> {
       }
 
       folder "roles" {
-        folder "common"
-        folder "docker" as dk
-        folder "k8s-node"
-        folder "k8s-cluster"
-        folder "cert-manager"
-        folder "ingress-nginx"
-        folder "prometheus-stack" as prom <<monitoring>>
-        folder "efk"
-        folder "postgres-ha" as pg     <<data>>
-        folder "redis"
+        folder "common" {
+          folder "defaults"{
+            file "main.yml"
+          }
+          folder "meta" {
+            file "main.yml"
+          }
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "docker" as dk {
+          folder "defaults" {
+            file "main.yml"
+          }
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "k8s-node" {
+          folder "defaults" {
+            file "main.yml"
+          }
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "k8s-cluster" {
+          folder "tasks" {
+            file "main.yml"
+          } 
+        }
+        folder "cert-manager" {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "ingress-nginx" {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "prometheus-stack" as prom <<monitoring>> {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "efk" {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "postgres-ha" as pg     <<data>> {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
+        folder "redis" {
+          folder "tasks" {
+            file "main.yml"
+          }
+        }
         folder "myapp-role"
       }
 

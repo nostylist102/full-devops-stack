@@ -1,0 +1,7 @@
+---
+- name: Deploy Redis via Helm
+  kubernetes.core.helm:
+    name: redis
+    chart_ref: bitnami/redis
+    release_namespace: redis
+    create_namespace: true
