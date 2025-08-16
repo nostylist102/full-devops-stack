@@ -1,6 +1,12 @@
-@startuml 123
+@startuml
+' ===================================================================
+' 1. Глобальное направление
+' ===================================================================
+top to bottom direction
 
-' === цветовая схема по назначению ===
+' ===================================================================
+' 2. Цвета
+' ===================================================================
 skinparam folderBackgroundColor<<root>>      White
 skinparam folderBackgroundColor<<app>>       LightGreen
 skinparam folderBackgroundColor<<deploy>>    LightSteelBlue
@@ -9,163 +15,240 @@ skinparam folderBackgroundColor<<data>>      LightYellow
 skinparam folderBackgroundColor<<monitoring>> LightPink
 skinparam folderBackgroundColor<<iac>>       PaleTurquoise
 
-' === главный контейнер ===
-folder "myapp" <<root>> {
-  ' ---------- Слой приложения ----------
-  folder "app" <<app>> {
-    file "main.go"  as goMain
-    file "main_test.go" as goTest
-    folder "handlers"
-    folder "models"
-    file "go.mod"   as goMod
-    file "go.sum"   as goSum
+' ===================================================================
+' 3. ВСЕ объекты (папки и файлы) объявлены отдельно
+' ===================================================================
 
-    note right of goMod
-      Go 1.22
-      chi v5
-    end note
-  }
+' --- Корень ---------------------------------------------------------
+folder "myapp" <<root>> as myapp
 
-  ' ---------- CI/CD ----------
-  folder ".github" <<github>> {
-    file "ci.yml"   as ci
-  }
+' --- Слой приложения -----------------------------------------------
+folder "app" <<app>> as app
+file  "main.go"      as goMain
+file  "main_test.go" as goTest
+folder "handlers"    as handlers
+folder "models"      as models
+file  "go.mod"       as goMod
+file  "go.sum"       as goSum
 
-  ' ---------- Deploy ----------
-  folder "deploy" <<deploy>> {
-    folder "ansible" {
-      file "README.md"
-      file "ansible.cfg"
-      file "requirements.yml"
+' --- CI/CD ---------------------------------------------------------
+folder ".github" <<github>> as dotGithub
+file   "ci.yml"             as ci
 
-      folder "inventory" {
-        file "dev.yml"
-        file "prod.yml"
-      }
+' --- Deploy --------------------------------------------------------
+folder "deploy" <<deploy>> as deploy
 
+folder "ansible" as ansible
+file   "README.md"         as ansibleREADME
+file   "ansible.cfg"       as ansibleCfg
+file   "requirements.yml"  as requirements
 
+folder "inventory"         as inventory
+file   "dev.yml"           as devYML
+file   "prod.yml"          as prodYML
 
-      folder "playbooks" {
-        file "site.yml"      as site
-        file "provision.yml" as provision
-        file "deploy.yml"    as deployPlay
-        file "cleanup.yml"
-      }
+folder "playbooks"         as playbooks
+file   "site.yml"          as site
+file   "provision.yml"     as provision
+file   "deploy.yml"        as deployPlay
+file   "cleanup.yml"       as cleanup
 
-      folder "roles" {
-        folder "common" {
-          folder "defaults"{
-            file "main.yml"
-          }
-          folder "meta" {
-            file "main.yml"
-          }
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "docker" as dk {
-          folder "defaults" {
-            file "main.yml"
-          }
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "k8s-node" {
-          folder "defaults" {
-            file "main.yml"
-          }
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "k8s-cluster" {
-          folder "tasks" {
-            file "main.yml"
-          } 
-        }
-        folder "cert-manager" {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "ingress-nginx" {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "prometheus-stack" as prom <<monitoring>> {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "efk" {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "postgres-ha" as pg     <<data>> {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "redis" {
-          folder "tasks" {
-            file "main.yml"
-          }
-        }
-        folder "myapp-role"
-      }
+folder "roles"             as roles
 
-      folder "group_vars" {
-        file "all.yml"
-        file "k8s_cluster.yml"
-        file "myapp.yml"
-      }
+folder "common"            as roleCommon
+folder "common_defaults"   as commonDefaults
+file   "common_defaults_main.yml" as commonDefaultsMain
+folder "common_meta"       as commonMeta
+file   "common_meta_main.yml"     as commonMetaMain
+folder "common_tasks"      as commonTasks
+file   "common_tasks_main.yml"    as commonTasksMain
 
-      folder "host_vars"
-    }
+folder "docker" <<deploy>> as roleDocker
+folder "docker_defaults"   as dockerDefaults
+file   "docker_defaults_main.yml" as dockerDefaultsMain
+folder "docker_tasks"      as dockerTasks
+file   "docker_tasks_main.yml"    as dockerTasksMain
 
-    
-    
-    folder "terraform"  <<iac>> {
-      file "main.tf"
-    }
-    folder "helm" {
-      file "values.yaml"
-    }
-    folder "docker" {
-      file "Dockerfile"
-    }
-    folder "k8s" {
-      file "deployment.yaml"
-    }
-    file "skaffold.yaml"
-    file "docker-compose.yml"
-  }
+folder "k8s-node"          as roleK8sNode
+folder "k8s-node_defaults" as k8sNodeDefaults
+file   "k8s-node_defaults_main.yml" as k8sNodeDefaultsMain
+folder "k8s-node_tasks"    as k8sNodeTasks
+file   "k8s-node_tasks_main.yml"    as k8sNodeTasksMain
 
-  ' ---------- Misc ----------
-  file ".pre-commit-config.yaml"
-  file "Taskfile.yml"
-  file "requirements.txt"
-  file "LICENSE"
-  file "README.md"
-}
+folder "k8s-cluster"       as roleK8sCluster
+folder "k8s-cluster_tasks" as k8sClusterTasks
+file   "k8s-cluster_tasks_main.yml" as k8sClusterTasksMain
 
-' ---------- потоки и зависимости ----------
-ci --> site  : triggers
-site --> provision : include
-provision --> k8sCluster : apply
-pg --> prom : expose metrics
+folder "cert-manager"      as roleCertManager
+folder "cert-manager_tasks" as certManagerTasks
+file   "cert-manager_tasks_main.yml" as certManagerTasksMain
 
-cloud "Docker Hub"  as hub {
-  folder "myapp:latest"
-}
-dk --> hub : push
+folder "ingress-nginx"     as roleIngressNginx
+folder "ingress-nginx_tasks" as ingressNginxTasks
+file   "ingress-nginx_tasks_main.yml" as ingressNginxTasksMain
 
-' ---------- легенда ----------
-legend right
+folder "prometheus-stack" <<monitoring>> as roleProm
+folder "prometheus_tasks" as promTasks
+file   "prometheus_tasks_main.yml" as promTasksMain
+
+folder "efk"               as roleEfk
+folder "efk_tasks"         as efkTasks
+file   "efk_tasks_main.yml" as efkTasksMain
+
+folder "postgres-ha" <<data>> as rolePg
+folder "postgres_tasks"    as pgTasks
+file   "postgres_tasks_main.yml" as pgTasksMain
+
+folder "redis"             as roleRedis
+folder "redis_tasks"       as redisTasks
+file   "redis_tasks_main.yml" as redisTasksMain
+
+folder "myapp-role"        as roleMyapp
+
+folder "group_vars"        as groupVars
+file   "all.yml"           as groupAllYML
+file   "k8s_cluster.yml"   as groupK8sYML
+file   "myapp.yml"         as groupMyappYML
+
+folder "host_vars"         as hostVars
+
+folder "terraform" <<iac>> as terraform
+file   "main.tf"           as tfMain
+
+folder "helm"              as helm
+file   "values.yaml"       as helmValues
+
+folder "docker"            as deployDocker
+file   "Dockerfile"        as dockerfile
+
+folder "k8s"               as deployK8s
+file   "deployment.yaml"   as k8sDeployment
+
+file   "skaffold.yaml"     as skaffold
+file   "docker-compose.yml" as compose
+
+' --- Misc ----------------------------------------------------------
+file ".pre-commit-config.yaml" as preCommit
+file "Taskfile.yml"            as taskfile
+file "requirements.txt"        as reqTxt
+file "LICENSE"                 as license
+file "README.md"               as readmeRoot
+
+' ===================================================================
+' 4. СВЯЗИ: задаём вертикальный порядок
+' ===================================================================
+
+' --- Корень -> первые дети -----------------------------------------
+myapp --> app
+myapp --> dotGithub
+myapp --> deploy
+myapp --> preCommit
+myapp --> taskfile
+myapp --> reqTxt
+myapp --> license
+myapp --> readmeRoot
+
+' --- app -> файлы/папки --------------------------------------------
+app   --> goMain
+app   --> goTest
+app   --> handlers
+app   --> models
+app   --> goMod
+app   --> goSum
+
+' --- .github -> ci.yml ---------------------------------------------
+dotGithub --> ci
+
+' --- deploy -> подпапки --------------------------------------------
+deploy --> ansible
+deploy --> terraform
+deploy --> helm
+deploy --> deployDocker
+deploy --> deployK8s
+deploy --> skaffold
+deploy --> compose
+
+' --- ansible -> внутренности ---------------------------------------
+ansible --> ansibleREADME
+ansible --> ansibleCfg
+ansible --> requirements
+ansible --> inventory
+ansible --> playbooks
+ansible --> roles
+ansible --> groupVars
+ansible --> hostVars
+
+inventory --> devYML
+inventory --> prodYML
+
+playbooks --> site
+playbooks --> provision
+playbooks --> deployPlay
+playbooks --> cleanup
+
+roles --> roleCommon
+roles --> roleDocker
+roles --> roleK8sNode
+roles --> roleK8sCluster
+roles --> roleCertManager
+roles --> roleIngressNginx
+roles --> roleProm
+roles --> roleEfk
+roles --> rolePg
+roles --> roleRedis
+roles --> roleMyapp
+
+roleCommon       --> commonDefaults
+commonDefaults   --> commonDefaultsMain
+roleCommon       --> commonMeta
+commonMeta       --> commonMetaMain
+roleCommon       --> commonTasks
+commonTasks      --> commonTasksMain
+
+roleDocker       --> dockerDefaults
+dockerDefaults   --> dockerDefaultsMain
+roleDocker       --> dockerTasks
+dockerTasks      --> dockerTasksMain
+
+roleK8sNode      --> k8sNodeDefaults
+k8sNodeDefaults  --> k8sNodeDefaultsMain
+roleK8sNode      --> k8sNodeTasks
+k8sNodeTasks     --> k8sNodeTasksMain
+
+roleK8sCluster   --> k8sClusterTasks
+k8sClusterTasks  --> k8sClusterTasksMain
+
+roleCertManager  --> certManagerTasks
+certManagerTasks --> certManagerTasksMain
+
+roleIngressNginx --> ingressNginxTasks
+ingressNginxTasks --> ingressNginxTasksMain
+
+roleProm         --> promTasks
+promTasks        --> promTasksMain
+
+roleEfk          --> efkTasks
+efkTasks         --> efkTasksMain
+
+rolePg           --> pgTasks
+pgTasks          --> pgTasksMain
+
+roleRedis        --> redisTasks
+redisTasks       --> redisTasksMain
+
+groupVars --> groupAllYML
+groupVars --> groupK8sYML
+groupVars --> groupMyappYML
+
+terraform --> tfMain
+helm      --> helmValues
+deployDocker --> dockerfile
+deployK8s    --> k8sDeployment
+
+' ===================================================================
+' 5. Легенда
+' ===================================================================
+legend bottom
   | Color | Layer      |
   |<#LightGreen>   App        |
   |<#LightSteelBlue> Deploy     |
